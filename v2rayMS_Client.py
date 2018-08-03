@@ -21,7 +21,7 @@ UPDATE_TRANSFER = 600  # 用户流量刷新时间
 SERVER = '127.0.0.1'
 PORT = 8854
 BUFSIZE = 4096
-CONNECT_KEY = 'ok'
+# CONNECT_KEY = 'ok'
 # v2ray用户默认值设置
 LEVEL = 1
 ALTERID = 64
