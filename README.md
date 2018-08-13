@@ -19,11 +19,11 @@ v2rayMS_Server.py<br />
 v2server.py<br />
 sqlconn.json<br />
 ### sqlconn.json为数据库连接文件  根据自己的mysql数据库配置<br />
-### 执行以下命令启动<br />
+执行以下命令启动<br />
 nohup python3 v2rayMS_Server.py>> server.log 2>&1 &<br />
 <br />
 ## 节点服务器存放以下文件<br />
 v2rayMS_Client.py<br />
-打开文件  修改服务端IP<br />
+### vim打开文件  修改服务端IP<br />
 执行以下命令启动<br />
 nohup python3 v2rayMS_Client.py>> server.log 2>&1 &<br />
