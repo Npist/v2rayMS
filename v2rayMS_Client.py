@@ -26,7 +26,7 @@ BUFSIZE = 4096
 LEVEL = 1
 ALTERID = 64
 
-# V2RAY_PATH = '/usr/bin/v2ray/v2ray'
+V2RAY_PATH = '/usr/bin/v2ray/v2ray'
 config_path = '/etc/v2ray/config.json'
 
 
