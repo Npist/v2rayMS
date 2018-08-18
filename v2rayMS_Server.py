@@ -9,7 +9,6 @@
 @Ver     :   0.1
 '''
 
-import threading
 from socketserver import BaseRequestHandler, ThreadingTCPServer
 import time
 import v2server
@@ -25,8 +24,6 @@ BUFSIZE = 4096
 class Handler(BaseRequestHandler):
     def handle(self):
         self.conn_sql = v2server.sqlconn()
-        lock = threading.Lock()
-        lock.acquire()
         while True:
             try:
                 data = self.request.recv(BUFSIZE)
@@ -42,7 +39,6 @@ class Handler(BaseRequestHandler):
             except Exception as e:
                 print(e)
                 break
-        lock.release()
         print("close:", self.request.getpeername())
         self.conn_sql.conn.close()
         self.request.close()
