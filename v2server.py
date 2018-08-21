@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 # -*- coding: UTF-8 -*-
 import os
 import json
@@ -8,21 +8,17 @@ import sys
 @License :   (C) Copyright 2018, npist.com
 @Contact :   npist35@gmail.com
 @File    :   v2server.py
-@Time    :   2018.8.3
-@Ver     :   0.1
+@Time    :   2018.8.20
+@Ver     :   0.2
 '''
 
 
 # 数据处理
 class sqlconn(object):
     def __init__(self):
-        self.CHECK_CHANGE = True
         self.userlist = {}
-        # self.userlist_temp = {}
-        self.usertransfer = {}
-        self.username_dict = {}
-        self.username_list = []
-        self.all_userstatus = {}
+        # 数据
+        self.data = []
         self.cfg = {
             "host": "127.0.0.1",
             "port": 3306,
@@ -67,6 +63,7 @@ class sqlconn(object):
                 print('The default connection information is used!')
             if conncfg:
                 self.cfg.update(conncfg)
+        print('Get Mysql Connection information successfully!')
 
     # 读取数据库连接
     def get_sql(self):
@@ -113,18 +110,26 @@ class sqlconn(object):
             print(e)
             data = None
             # sys.exit(1)
+        finally:
+            cursor.close()
         return data
 
     # 检索用户列表
     def pull_user(self):
-        sql_exec = "SELECT uuid, email, enable FROM user"
-        data = self.execute_sql(sql_exec)
-        if data is not None:
-            data_list = []
-            for a in data:
-                user_dict = json.dumps(a)
-                data_list.append(user_dict)
-            data_str = '#'.join(data_list)
+        from copy import deepcopy
+        sql_exec = "SELECT uuid, enable, sid FROM user"
+        data_cache = self.execute_sql(sql_exec)
+        if data_cache == self.data:
+            return None
         else:
-            data_str = None
+            # 检索变更内容
+            data_change = [
+                i for i in data_cache
+                if i not in [m for m in self.data if m in data_cache]
+            ]
+            # 提取values
+            data_cov = [list(n.values()) for n in data_change]
+            # 转换整个list为字符串
+            data_str = '#'.join('%s' % o for o in data_cov)
+            self.data = deepcopy(data_cache)
         return data_str

@@ -1,7 +1,11 @@
 # 仅供测试使用<br />
-# 效果可查看https://proxy.npist.com<br />
-# 有问题请联系npist35@gmail.com<br />
+实际部署请为socket通讯中的安全性进行强化<br />
+效果可查看https://proxy.npist.com<br />
+有问题请联系npist35@gmail.com<br />
 # 更新日志<br />
+## 2018.8.21<br />
+优化socket传输中的数据量<br />
+whmcs模块安装请参考http://www.mak-blog.com/whmcs-shadowsocks-plugin.html<br />
 ## 2018.8.13<br />
 添加whmcs模块<br />
 修改自https://github.com/kesuki/whmcs-shadowsocks-plugin<br />
@@ -21,9 +25,11 @@ sqlconn.json<br />
 ### sqlconn.json为数据库连接文件  根据自己的mysql数据库配置<br />
 执行以下命令启动<br />
 nohup python3 v2rayMS_Server.py>> server.log 2>&1 &<br />
+如未启动请前台执行python3 v2rayMS_Server.py或查看server.log分析Log<br />
 <br />
 ## 节点服务器存放以下文件<br />
 v2rayMS_Client.py<br />
 ### vim打开文件  修改服务端IP<br />
 执行以下命令启动<br />
 nohup python3 v2rayMS_Client.py>> server.log 2>&1 &<br />
+如未启动请前台执行python3 v2rayMS_Server.py或查看server.log分析Log<br />

@@ -32,7 +32,6 @@ USE `v2ray`;
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
-  `email` varchar(255) NOT NULL,
   `uuid` varchar(36) NOT NULL,
   `t` int(11) NOT NULL DEFAULT 0,
   `u` bigint(20) NOT NULL,
@@ -53,7 +52,7 @@ CREATE TABLE `user` (
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`,`email`,`uuid`,`sid`) USING BTREE;
+  ADD PRIMARY KEY (`id`, `uuid`,`sid`) USING BTREE;
 
 --
 -- 在导出的表使用AUTO_INCREMENT
