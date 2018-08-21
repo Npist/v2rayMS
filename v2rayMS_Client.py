@@ -103,14 +103,14 @@ def sql_cov_json(userlist, user_os=None):
         for user in userlist:
             if user[1] == 1:
                 usrname_cfg = {}
-                usrname_cfg['uuid'] = user[0]
+                usrname_cfg['id'] = user[0]
                 usrname_cfg['email'] = str(user[2]) + '@npist.com'
                 usrname_cfg['alterId'] = ALTERID
                 usrname_cfg['level'] = LEVEL
                 # 添加进数据库
                 User_list.append(usrname_cfg)
             elif user[1] == 0:
-                del_user = [i for i in User_list if i['uuid'] == user[0]]
+                del_user = [i for i in User_list if i['id'] == user[0]]
                 # 从数据库删除
                 User_list = [m for m in User_list if m not in del_user]
         return User_list
