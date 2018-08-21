@@ -32,4 +32,4 @@ v2rayMS_Client.py<br />
 ### vim打开文件  修改服务端IP<br />
 执行以下命令启动<br />
 nohup python3 v2rayMS_Client.py>> server.log 2>&1 &<br />
-如未启动请前台执行python3 v2rayMS_Server.py或查看server.log分析Log<br />
+如未启动请前台执行python3 v2rayMS_Client.py或查看server.log分析Log<br />
