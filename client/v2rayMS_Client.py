@@ -4,25 +4,27 @@ import os
 import sys
 import time
 import json
+import subprocess
 '''
 @Author  :   npist
 @License :   (C) Copyright 2018, npist.com
 @Contact :   npist35@gmail.com
 @File    :   v2rayMS_Client.py
-@Time    :   2018.8.20
-@Ver     :   0.2
+@Time    :   2018.9.6
+@Ver     :   0.3
 '''
 
-# 用户自定义变量
-UPDATE_TIME = 60  # 用户列表刷新时间
-UPDATE_TRANSFER = 600  # 用户流量刷新时间
+# 刷新时间
+UPDATE_TIME = 50
 # 服务器端口
 SERVER = '127.0.0.1'
 PORT = 8854
 BUFSIZE = 4096
 
+DOMAIN = 'npist.com'
+
 # v2ray用户默认值设置
-LEVEL = 1
+LEVEL = 0
 ALTERID = 64
 V2RAY_PATH = '/usr/bin/v2ray/v2ray'
 # V2RAY_PATH = '.\\bin\\v2ray.exe'
@@ -31,11 +33,10 @@ CONFIG_PATH = '/etc/v2ray/config.json'
 V2CTL_PATH = '/usr/bin/v2ray/v2ctl'
 # V2CTL_PATH = '.\\bin\\v2ctl.exe'
 # CTL_PORT
-CTL_PORT = 8855
+CTL_PORT = 10085
 
-# 程序配置
+# 初始化用户列表
 User_list = []
-GUD = ['pull_list']  # 获取列表
 
 
 # 检查更新
@@ -84,11 +85,6 @@ def check_v2ray(run_os):
         sys.exit(1)
 
 
-# Log输出
-def save_log():
-    pass
-
-
 # 转换数据库为json
 def sql_cov_json(userlist, user_os=None):
     # 获取配置文件
@@ -104,14 +100,12 @@ def sql_cov_json(userlist, user_os=None):
             if user[1] == 1:
                 usrname_cfg = {}
                 usrname_cfg['id'] = user[0]
-                usrname_cfg['email'] = str(user[2]) + '@npist.com'
+                usrname_cfg['email'] = str(user[2]) + '@' + DOMAIN
                 usrname_cfg['alterId'] = ALTERID
                 usrname_cfg['level'] = LEVEL
-                # 添加进数据库
                 User_list.append(usrname_cfg)
             elif user[1] == 0:
                 del_user = [i for i in User_list if i['id'] == user[0]]
-                # 从数据库删除
                 User_list = [m for m in User_list if m not in del_user]
         return User_list
 
@@ -164,8 +158,52 @@ def isRunning(process_name):
 
 
 # 检查用户流量
-def transfer_check(user):
-    pass
+def traffic_check(user):
+    def traffic_get_msg(cmd):
+        import re
+        try:
+            exec_cmd = subprocess.Popen(
+                (cmd),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                shell=True)
+            outs, errs = exec_cmd.communicate(timeout=1)
+        except subprocess.TimeoutExpired as e:
+            exec_cmd.kill()
+            return 0
+        finally:
+            exec_cmd.kill()
+        allouts = (outs + errs).decode()
+        # temp = b'stat: <\n  name: "user>>>9DvGOBEtLiyjqMxd@npist.com>>>traffic>>>downlink"\n  value: 588\n>\n\n'
+        # allouts = temp.decode()
+        error_str = 'failed to call service StatsService.GetStats'
+        check_error = re.search(error_str, str(allouts))
+        if check_error is not None:
+            return 0
+        else:
+            try:
+                traffic_values = [
+                    i for i in allouts.split('\n') if re.search('value:', i)
+                ][0].strip()[7:]
+                return traffic_values
+            except Exception as e:
+                return 0
+
+    # 设置查询参数
+    cmd_downlink = V2CTL_PATH + ' api --server=127.0.0.1:' + str(
+        CTL_PORT
+    ) + ' StatsService.GetStats \'name: \"user>>>' + user + '>>>traffic>>>downlink\" reset: true\''
+    cmd_uplink = V2CTL_PATH + ' api --server=127.0.0.1:' + str(
+        CTL_PORT
+    ) + ' StatsService.GetStats \'name: \"user>>>' + user + '>>>traffic>>>uplink\" reset: true\''
+    # 查询
+    d_data = int(traffic_get_msg(cmd_downlink))
+    u_data = int(traffic_get_msg(cmd_uplink))
+    if u_data == 0:
+        return 0
+    else:
+        use_time = int(time.time())
+        return d_data, u_data, use_time
 
 
 # 刷新配置文件
@@ -184,54 +222,68 @@ def update_cfg(u_list, run_os):
 
 # 请求数据
 def accept_data(data):
-    # 发送请求
     send_data(data)
     time.sleep(0.1)
-    # 接收长度信息
     data_size = sock.recv(BUFSIZE)
     if data_size == b'error':
         return None
-    # 回复已接收
     sock.sendall(b'!#%')
-    # 初始化长度变量, 字符串
     recevied_size = 0
     recevied_data = b''
-    # 数据未接收全的情况进行循环监听
     while recevied_size < int(data_size.decode()):
         data_res = sock.recv(BUFSIZE)
-        recevied_size += len(data_res)  # 每次收到的服务端的数据有可能小于1024，所以必须用len判断
+        recevied_size += len(data_res)
         recevied_data += data_res
     else:
-        # 数据接收完毕
         print("data receive done ....", recevied_size)
     return recevied_data
 
 
 # 发送数据
 def send_data(string):
-    # 判断数据长度 并发送长度
     str_len = len(string)
     sock.sendall(str(str_len).encode())
     time.sleep(0.1)
     if sock.recv(BUFSIZE) == b'!#%':
-        # 发送数据
         sock.sendall(string.encode())
     else:
         print('error')
 
 
 def accept_cfg():
-    # 刷新配置文件
-    GUD_str = '#'.join(GUD)
-    user_config = accept_data(GUD_str)  # 接收数据
-    # 数据有变化，刷新v2ray配置文件
-    if user_config is not None:
+    Gud = ['pull_list']
+    Gud_str = '#'.join(Gud)
+    user_config_temp = accept_data(Gud_str)
+    if user_config_temp != b'None':
         print('Update user list')
-        user_config_list = [eval(i) for i in user_config.decode().split("#")]
+        user_config_temp = user_config_temp.decode()
+        user_config_list = [eval(i) for i in user_config_temp.split("#")]
         update_cfg(user_config_list, run_os)
         print('Update OK!')
     else:
         print('没有更新')
+
+
+# 更新流量
+def update_traffic():
+    Gud = ['push_traffic']
+    for user in User_list:
+        try:
+            traffic_msg = traffic_check(user['email'])
+            if traffic_msg != 0:
+                Gud.append([
+                    int(user['email'][:-(len(DOMAIN) + 1)]), traffic_msg[0],
+                    traffic_msg[1], traffic_msg[2]
+                ])
+        except Exception as e:
+            print('ID:' + user['email'][:-(len(DOMAIN) + 1)] +
+                  ' Traffic read error!')
+            print(e)
+    Gud_str = '#'.join('%s' % i for i in Gud)
+    if accept_data(Gud_str) == '$%^':
+        return
+    else:
+        pass
 
 
 # 主函数
@@ -240,6 +292,7 @@ def main():
     while True:
         print(time.asctime(time.localtime(time.time())))
         accept_cfg()
+        update_traffic()
         time.sleep(UPDATE_TIME)
 
 
@@ -252,8 +305,7 @@ if __name__ == "__main__":
         check_python()
     except Exception:
         print('error')
-    # 初始化连接
+    # 初始化
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.connect((SERVER, PORT))
     main()
-

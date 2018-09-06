@@ -8,17 +8,23 @@ import sys
 @License :   (C) Copyright 2018, npist.com
 @Contact :   npist35@gmail.com
 @File    :   v2server.py
-@Time    :   2018.8.20
-@Ver     :   0.2
+@Time    :   2018.9.6
+@Ver     :   0.3
 '''
 
 
 # 数据处理
 class sqlconn(object):
     def __init__(self):
+        self.CHECK_CHANGE = True
         self.userlist = {}
         # 数据
         self.data = []
+        # self.userlist_temp = {}
+        self.usertransfer = {}
+        self.username_dict = {}
+        self.username_list = []
+        self.all_userstatus = {}
         self.cfg = {
             "host": "127.0.0.1",
             "port": 3306,
@@ -63,7 +69,7 @@ class sqlconn(object):
                 print('The default connection information is used!')
             if conncfg:
                 self.cfg.update(conncfg)
-        print('Get Mysql Connection information successfully!')
+        # print('Get Mysql Connection information successfully!')
 
     # 读取数据库连接
     def get_sql(self):
@@ -120,7 +126,7 @@ class sqlconn(object):
         sql_exec = "SELECT uuid, enable, sid FROM user"
         data_cache = self.execute_sql(sql_exec)
         if data_cache == self.data:
-            return None
+            return 'None'
         else:
             # 检索变更内容
             data_change = [
@@ -133,3 +139,39 @@ class sqlconn(object):
             data_str = '#'.join('%s' % o for o in data_cov)
             self.data = deepcopy(data_cache)
         return data_str
+
+    # # 获取有效用户名列表
+    # def pull_user_name(self):
+    #     sql_exec = "SELECT email FROM user"
+    #     add_program = 'self.username_dict = cursor.fetchall()'
+    #     self.execute_sql(sql_exec, add_program)
+    #     # 只保留id(email)
+    #     self.username_list = self.cov_dict_value(self.username_dict)
+
+    # 获取用户状态
+    # def pull_user_status(self, email):
+    #     sql_exec = "SELECT enable FROM user WHERE email = '%s'" % (email)
+    #     add_program = 'self.all_userstatus = cursor.fetchall()'
+    #     self.execute_sql(sql_exec, add_program)
+    #     # print(self.all_userstatus)
+
+    # # 检索用户流量
+    # def pull_user_transfer(self):
+    #     sql_exec = "SELECT * FROM user"  # "SELECT `user`.uuid, `user`.`enable` FROM `user`"
+    #     add_program = 'self.usertransfer = cursor.fetchall()'
+    #     self.execute_sql(sql_exec, add_program)
+
+    # 更新流量到数据库
+    def update_traffic(self, traffic_data):
+        d_tra_sql = 'UPDATE user SET downlink=downlink+' + str(
+            traffic_data[1]) + ' WHERE sid=' + str(traffic_data[0])
+        u_tra_sql = 'UPDATE user SET uplink=uplink+' + str(
+            traffic_data[2]) + ' WHERE sid=' + str(traffic_data[0])
+        use_time_sql = 'UPDATE user SET usetime=' + str(
+            traffic_data[3]) + ' WHERE sid=' + str(traffic_data[0])
+        try:
+            self.execute_sql(d_tra_sql)
+            self.execute_sql(u_tra_sql)
+            self.execute_sql(use_time_sql)
+        except Exception as e:
+            print(e)

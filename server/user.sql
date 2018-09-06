@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: 2018-08-03 14:59:53
+-- Generation Time: 2018-09-06 08:52:22
 -- 服务器版本： 10.3.8-MariaDB-log
 -- PHP Version: 7.2.8
 
@@ -21,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `v2ray`
 --
-CREATE DATABASE IF NOT EXISTS `v2ray` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `v2ray`;
 
 -- --------------------------------------------------------
 
@@ -33,9 +31,9 @@ USE `v2ray`;
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `uuid` varchar(36) NOT NULL,
-  `t` int(11) NOT NULL DEFAULT 0,
-  `u` bigint(20) NOT NULL,
-  `d` bigint(20) NOT NULL,
+  `usetime` int(11) NOT NULL DEFAULT 0,
+  `uplink` bigint(20) NOT NULL,
+  `downlink` bigint(20) NOT NULL,
   `transfer_enable` bigint(20) NOT NULL,
   `enable` tinyint(4) NOT NULL DEFAULT 1,
   `created_at` int(10) NOT NULL,
@@ -52,7 +50,7 @@ CREATE TABLE `user` (
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`, `uuid`,`sid`) USING BTREE;
+  ADD PRIMARY KEY (`id`,`uuid`,`sid`) USING BTREE;
 
 --
 -- 在导出的表使用AUTO_INCREMENT
