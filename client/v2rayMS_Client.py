@@ -288,7 +288,6 @@ def update_traffic():
 
 # 主函数
 def main():
-    global AES_Key
     while True:
         print(time.asctime(time.localtime(time.time())))
         accept_cfg()
