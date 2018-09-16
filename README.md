@@ -4,9 +4,9 @@
 有问题请联系npist35@gmail.com<br />
 # 更新日志<br />
 ## 2018.9.3<br />
-添加流量统计、最后在线时间
-更新数据库结构
-添加示例v2ray配置文件（配合流量统计用）
+添加流量统计、最后在线时间<br />
+更新数据库结构<br />
+添加示例v2ray配置文件（配合流量统计用）<br />
 ## 2018.8.21<br />
 优化socket传输中的数据量<br />
 ## 2018.8.13<br />
@@ -23,7 +23,7 @@
 bash <(curl -L -s https://install.direct/go.sh)<br />
 <br />
 ### Server目录存放进数据库服务器<br />
-user.sql恢复进mysql或者mariadb
+user.sql恢复进mysql或者mariadb<br />
 sqlconn.json为数据库连接文件  根据自己的mysql数据库配置<br />
 执行以下命令启动<br />
 nohup python3 -u v2rayMS_Server.py>> server.log 2>&1 &<br />
