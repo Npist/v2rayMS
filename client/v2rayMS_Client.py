@@ -257,9 +257,13 @@ def accept_cfg():
     if user_config_temp != b'None':
         print('Update user list')
         user_config_temp = user_config_temp.decode()
-        user_config_list = [eval(i) for i in user_config_temp.split("#")]
-        update_cfg(user_config_list, run_os)
-        print('Update OK!')
+        try:
+            user_config_list = [eval(i) for i in user_config_temp.split("#")]
+            update_cfg(user_config_list, run_os)
+            print('Update OK!')
+        except Exception as e:
+            print(e)
+            print('Update Error!')
     else:
         print('没有更新')
 
