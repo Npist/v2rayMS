@@ -25,12 +25,18 @@ bash <(curl -L -s https://install.direct/go.sh)<br />
 ### Server目录存放进数据库服务器<br />
 user.sql恢复进mysql或者mariadb<br />
 sqlconn.json为数据库连接文件  根据自己的mysql数据库配置<br />
-执行以下命令启动<br />
+<del>执行以下命令启动<br />
 nohup python3 -u v2rayMS_Server.py>> server.log 2>&1 &<br />
-后台运行前建议首先前台执行python3 v2rayMS_Server.py或查看server.log分析Log<br />
+后台运行前建议首先前台执行python3 v2rayMS_Server.py或查看server.log分析Log<br /></del>
+建议使用screen命令 在session中运行python3 v2rayMS_Server.py
 <br />
 ### Client目录存放进节点服务器<br />
 vim打开文件v2rayMS_Client.py  修改服务端IP<br />
-执行以下命令启动<br />
+<del>执行以下命令启动<br />
 nohup python3 -u v2rayMS_Client.py>> server.log 2>&1 &<br />
-后台运行前建议首先前台执行python3 v2rayMS_Client.py或查看server.log分析Log<br />
+后台运行前建议首先前台执行python3 v2rayMS_Client.py或查看server.log分析Log<br /></del>
+建议使用screen命令 在session中运行python3 v2rayMS_Client.py
+<br />
+<br />
+<br />
+SSH登录服务器使用nohup后台运行的话可能会出现broken pipe报错，原因应该是nohup会重定向stderr到stdout，ssh会话结束后会断开pipe
