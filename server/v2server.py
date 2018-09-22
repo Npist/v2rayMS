@@ -4,10 +4,10 @@ import os
 import json
 import sys
 '''
-@Author  :   npist
-@License :   (C) Copyright 2018, npist.com
-@Contact :   npist35@gmail.com
-@File    :   v2server.py
+@Author  :   Npist <npist35@gmail.com>
+@File    :   server.py
+@License :   http://opensource.org/licenses/MIT The MIT License
+@Link    :   https://npist.com/
 @Time    :   2018.9.6
 @Ver     :   0.3
 '''

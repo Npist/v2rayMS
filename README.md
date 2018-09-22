@@ -3,6 +3,9 @@
 效果可查看https://proxy.npist.com<br />
 有问题请联系npist35@gmail.com<br />
 # 更新日志<br />
+## 2018.9.22<br />
+添加/更新开源协议(MIT)<br />
+whmcs modules自GPLv3开源项目修改而来并以WHMCS插件形式存在，故继续遵守GPLv3协议<br />
 ## 2018.9.3<br />
 添加流量统计、最后在线时间<br />
 更新数据库结构<br />
