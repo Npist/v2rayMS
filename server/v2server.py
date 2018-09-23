@@ -8,8 +8,8 @@ import sys
 @File    :   server.py
 @License :   http://opensource.org/licenses/MIT The MIT License
 @Link    :   https://npist.com/
-@Time    :   2018.9.6
-@Ver     :   0.3
+@Time    :   2018.9.23
+@Ver     :   0.3.1
 '''
 
 
@@ -98,7 +98,7 @@ class sqlconn(object):
                     charset='utf8')
         except Exception as e:
             print(e)
-            # sys.exit(1)
+            sys.exit(1)
 
     # sql执行函数
     def execute_sql(self, sql_exec):
@@ -133,8 +133,18 @@ class sqlconn(object):
                 i for i in data_cache
                 if i not in [m for m in self.data if m in data_cache]
             ]
+            data_sid = [x['sid'] for x in self.data]
+            data_cache_sid = [y['sid'] for y in data_cache]
+            sid_change = [z for z in data_sid if z not in data_cache_sid]
+            data_delete = []
+            for n1 in self.data:
+                for n2 in sid_change:
+                    if n1['sid'] == n2:
+                        n1['enable'] = 0
+                        data_delete.append(n1)
+            data_all = data_change + data_delete
             # 提取values
-            data_cov = [list(n.values()) for n in data_change]
+            data_cov = [list(n.values()) for n in data_all]
             # 转换整个list为字符串
             data_str = '#'.join('%s' % o for o in data_cov)
             self.data = deepcopy(data_cache)
