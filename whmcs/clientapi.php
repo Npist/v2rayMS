@@ -3,7 +3,7 @@
  * @package    V2rayMS_ClientAPI
  * @author     Npist <npist35@gmail.com>
  * @license    http://opensource.org/licenses/MIT The MIT License
- * @version    0.1
+ * @version    0.1.1
  * @link       https://npist.com/
  */
 
@@ -75,10 +75,12 @@ function GetClientID($clientname, $clientpassword)
         if (is_int($results["userid"])) {
             return $results["userid"];
         } else {
-            return array("error_code", "0x013");
+        echo json_encode(array("error_code", "0x013"));
+        exit();
         }
     } else {
-        return array("error_code", "0x011");
+        echo json_encode(array("error_code", "0x011"));
+        exit();
     }
 }
 function GetClientsProductsByUser($clientid)
