@@ -74,7 +74,7 @@ function V2rayMS_ConfigOptions()
 		'Description' => '是否需要重置流量'
 		),
 	'流量限制' => array('Type' => 'text', 'Size' => '25', 'Description' => '单位MB'),
-	'线路列表' => array('Type' => 'textarea', 'Rows' => '3', 'Cols' => '50', 'Description' => '格式 xxx|端口|服务器地址|AlterID|传输协议|伪装混淆| 一行一个')
+	'线路列表' => array('Type' => 'textarea', 'Rows' => '3', 'Cols' => '50', 'Description' => '格式:线路名称|服务器地址|端口|AlterID|传输协议|伪装混淆| 一行一个')
 	);
 }
 function V2rayMS_TestConnection(array $params)
