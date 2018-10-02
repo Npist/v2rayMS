@@ -8,8 +8,8 @@ import sys
 @File    :   server.py
 @License :   http://opensource.org/licenses/MIT The MIT License
 @Link    :   https://npist.com/
-@Time    :   2018.9.23
-@Ver     :   0.3.1
+@Time    :   2018.10.3
+@Ver     :   0.3.2
 '''
 
 
@@ -74,31 +74,27 @@ class sqlconn(object):
     # 读取数据库连接
     def get_sql(self):
         import pymysql
-        try:
-            if self.cfg["ssl_enable"] == 1:
-                self.conn = pymysql.connect(
-                    host=self.cfg["host"],
-                    port=self.cfg["port"],
-                    user=self.cfg["user"],
-                    passwd=self.cfg["password"],
-                    db=self.cfg["db"],
-                    charset='utf8',
-                    ssl={
-                        'ca': self.cfg["ssl_ca"],
-                        'cert': self.cfg["ssl_cert"],
-                        'key': self.cfg["ssl_key"]
-                    })
-            else:
-                self.conn = pymysql.connect(
-                    host=self.cfg["host"],
-                    port=self.cfg["port"],
-                    user=self.cfg["user"],
-                    passwd=self.cfg["password"],
-                    db=self.cfg["db"],
-                    charset='utf8')
-        except Exception as e:
-            print(e)
-            sys.exit(1)
+        if self.cfg["ssl_enable"] == 1:
+            self.conn = pymysql.connect(
+                host=self.cfg["host"],
+                port=self.cfg["port"],
+                user=self.cfg["user"],
+                passwd=self.cfg["password"],
+                db=self.cfg["db"],
+                charset='utf8',
+                ssl={
+                    'ca': self.cfg["ssl_ca"],
+                    'cert': self.cfg["ssl_cert"],
+                    'key': self.cfg["ssl_key"]
+                })
+        else:
+            self.conn = pymysql.connect(
+                host=self.cfg["host"],
+                port=self.cfg["port"],
+                user=self.cfg["user"],
+                passwd=self.cfg["password"],
+                db=self.cfg["db"],
+                charset='utf8')
 
     # sql执行函数
     def execute_sql(self, sql_exec):
@@ -110,11 +106,11 @@ class sqlconn(object):
             data = cursor.fetchall()
             self.conn.commit()
             # 关闭
-            cursor.close()
+            # cursor.close()
             # self.conn.close()
         except Exception as e:
-            print(e)
-            data = None
+            # print(e)
+            data = 'error'
             # sys.exit(1)
         finally:
             cursor.close()
@@ -125,6 +121,9 @@ class sqlconn(object):
         from copy import deepcopy
         sql_exec = "SELECT uuid, enable, sid FROM user"
         data_cache = self.execute_sql(sql_exec)
+        if data_cache == 'error':
+            return 'error'
+        self.traffic_check(data_cache)
         if data_cache == self.data:
             return 'None'
         else:
@@ -149,6 +148,16 @@ class sqlconn(object):
             data_str = '#'.join('%s' % o for o in data_cov)
             self.data = deepcopy(data_cache)
         return data_str
+
+    # 判断用户流量是否超标
+    def traffic_check(self, all_user):
+        sql_exec = "SELECT uplink, downlink, transfer_enable, sid FROM user"
+        tmp = self.execute_sql(sql_exec)
+        for i in tmp:
+            if i['uplink'] + i['downlink'] > i['transfer_enable']:
+                for n in all_user:
+                    if n['sid'] == i['sid']:
+                        n['enable'] = 0
 
     # # 获取有效用户名列表
     # def pull_user_name(self):
@@ -179,9 +188,6 @@ class sqlconn(object):
             traffic_data[2]) + ' WHERE sid=' + str(traffic_data[0])
         use_time_sql = 'UPDATE user SET usetime=' + str(
             traffic_data[3]) + ' WHERE sid=' + str(traffic_data[0])
-        try:
-            self.execute_sql(d_tra_sql)
-            self.execute_sql(u_tra_sql)
-            self.execute_sql(use_time_sql)
-        except Exception as e:
-            print(e)
+        self.execute_sql(d_tra_sql)
+        self.execute_sql(u_tra_sql)
+        self.execute_sql(use_time_sql)

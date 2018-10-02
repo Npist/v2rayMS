@@ -3,6 +3,8 @@
 效果可查看https://proxy.npist.com<br />
 有问题请联系npist35@gmail.com<br />
 # 更新日志<br />
+## 2018.10.3<br />
+修复服务端若干BUG<br />
 ## 2018.9.22<br />
 添加ClientApi模块，为计划中的客户端提供接口<br />
 添加/更新开源协议(MIT)<br />

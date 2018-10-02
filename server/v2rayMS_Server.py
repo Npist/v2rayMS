@@ -11,10 +11,9 @@ import v2server
 @File    :   v2rayMS_Server.py
 @License :   http://opensource.org/licenses/MIT The MIT License
 @Link    :   https://npist.com/
-@Time    :   2018.9.6
-@Ver     :   0.3
+@Time    :   2018.10.3
+@Ver     :   0.3.1
 '''
-
 
 HOST = '0.0.0.0'
 PORT = 8854
@@ -27,8 +26,10 @@ ins_queue = queue.Queue()
 # 多线程
 class Handler(BaseRequestHandler):
     def handle(self):
-        global AES_Key
-        conn_sql = v2server.sqlconn()
+        ipadd = str(self.request.getpeername()[0])
+        c_port = str(self.request.getpeername()[1])
+        s_msg = '[' + ipadd + ':' + c_port + ']'
+        conn_sql = init_sqlconn(0, s_msg)
         while True:
             try:
                 # 接收数据
@@ -38,6 +39,8 @@ class Handler(BaseRequestHandler):
                     msg = conn_sql.pull_user()
                     if msg is not None:
                         self.send_data(msg)
+                        if msg == 'error':
+                            conn_sql = init_sqlconn(1, s_msg)
                 elif proc_data[0] == 'push_traffic':
                     if len(proc_data) != 1:
                         users_traffic = [
@@ -78,27 +81,51 @@ class Handler(BaseRequestHandler):
         return recevied_data
 
 
+def init_sqlconn(i, source):
+    mark = True
+    while mark:
+        print(
+            source + ':' + time.asctime(time.localtime(time.time())) + ':',
+            end='')
+        try:
+            conn = v2server.sqlconn()
+            if i == 0:
+                print('Mysql Connection Successfully')
+            elif i == 1:
+                print('Mysql Connection Successfully Recovered')
+            mark = False
+        except Exception:
+            print('Mysql Connection Error')
+            time.sleep(10)
+            continue
+    return conn
+
+
 # 流量更新
 def sql_queue():
-    conn_sql = v2server.sqlconn()
+    s_msg = '[Queue]'
+    conn_sql = init_sqlconn(0, s_msg)
     while True:
         if ins_queue.empty() is not True:
             sql_task = ins_queue.get()
             for i in sql_task:
-                conn_sql.update_traffic(i)
+                try:
+                    conn_sql.update_traffic(i)
+                except Exception:
+                    conn_sql = init_sqlconn(1, s_msg)
         time.sleep(0.1)
 
 
 # 服务器监听
 def serve_listen():
     server = ThreadingTCPServer((HOST, PORT), Handler)
-    print('listening')
     server.serve_forever()
     print(server)
 
 
 # 主函数
 def main():
+    print('listening')
     que_thread = threading.Thread(target=sql_queue)
     ser_thread = threading.Thread(target=serve_listen)
     que_thread.start()
