@@ -47,6 +47,12 @@ v2server.py为数据库更新程序，请将第47行的文件目录修改成serv
 *上述文件目录请自行更改*
 > `Ctrl+a`,`d`,`Enter`
 
+添加定时任务，每月1日0点执行
+
+> php /home/V2rayMS/server/cron.php
+
+*上述文件目录请自行更改*
+
 ### 3.client目录存放进节点服务器<br />
 v2rayMS_Client.py为节点服务器主程序，请将第314行的IP修改成节点服务器的IP<br />
 
