@@ -24,7 +24,6 @@ whmcs modules自GPLv3开源项目修改而来并以WHMCS插件形式存在，故
 建议使用Python3.6运行<br />
 节点服务器运行前请参考官方文档安装v2ray<br />
 V2Ray安装命令行如下<br />
-
 > bash <(curl -L -s https://install.direct/go.sh)<br />
 
 ### 2.server目录存放进数据库服务器<br />
