@@ -52,19 +52,19 @@ $(document).ready(function() {
 	jQuery(document).ready(function($) {
 		$("button[name='qrcode']").on('click',function() {
 			if ($(this).attr('data-type').indexOf("vmess") != -1) {
-			var json_obj = {"v": "","ps": "","add": "","port": "","id": "","aid": "","net": "","type": "","host": "","path": "","tls": ""};
-			var json_data = $(this).attr('data-params').split(':');
-			json_obj.v = "2";
-			json_obj.ps = json_data[0];
-			json_obj.add = json_data[1];
-			json_obj.port = json_data[2];
-			json_obj.id = json_data[3];
-			json_obj.aid = json_data[4];
-			json_obj.net = json_data[5];
-			json_obj.type = json_data[6];
-			json_obj.host = json_data[7];
-			json_obj.path = json_data[8];
-			str = base64encode(JSON.stringify(json_obj, undefined, 2));
+                	var json_obj = {"v": "","ps": "","add": "","port": "","id": "","aid": "","net": "","type": "","host": "","path": "","tls": ""};
+                	var json_data = $(this).attr('data-params').split(':');
+                	json_obj.v = "2";
+                	json_obj.ps = json_data[0];
+                	json_obj.add = json_data[1];
+                	json_obj.port = json_data[2];
+                	json_obj.id = json_data[3];
+                	json_obj.aid = json_data[4];
+                	json_obj.net = json_data[5];
+                	json_obj.type = json_data[6];
+                	json_obj.host = json_data[7];
+                	json_obj.path = json_data[8];
+                	str = base64encode(JSON.stringify(json_obj, undefined, 2));
 			} else {
 				str = base64encode($(this).attr('data-params'));
 			}
