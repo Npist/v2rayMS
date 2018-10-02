@@ -42,7 +42,7 @@ v2server.py为数据库更新程序，请将第47行的文件目录修改成serv
 > screen -L -t v2s -S v2s
 
 *在/etc/screenrc文件中添加**logfile /home/screenlog/%t.log**可配合上述语句将日志自动导出到/home/screenlog/目录下*
-> python3 -u /home/v2rayMS/server/v2rayMS_Server.py
+> python3 -u /home/V2rayMS/server/v2rayMS_Server.py
 
 *上述文件目录请自行更改*
 > `Ctrl+a`,`d`,`Enter`
@@ -59,7 +59,7 @@ v2rayMS_Client.py为节点服务器主程序，请将第314行的IP修改成节�
 > screen -L -t v2c -S v2c
 
 *在/etc/screenrc文件中添加**logfile /home/screenlog/%t.log**可配合上述语句将日志自动导出到/home/screenlog/目录下*
-> python3 -u /home/v2rayMS/client/v2rayMS_Client.py
+> python3 -u /home/V2rayMS/client/v2rayMS_Client.py
 
 *上述文件目录请自行更改*
 > `Ctrl+a`,`d`,`Enter`
