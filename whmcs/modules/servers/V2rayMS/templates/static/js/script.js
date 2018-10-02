@@ -2,6 +2,7 @@ var base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012
 function base64encode(str) {
     var out, i, len;
     var c1, c2, c3;
+    str = utf8_encode(str);
     len = str.length;
     i = 0;
     out = "";
@@ -28,6 +29,24 @@ function base64encode(str) {
         out += base64EncodeChars.charAt(c3 & 0x3F);
     }
     return out;
+}
+function utf8_encode(str) {
+    str = str.replace(/\r\n/g, "\n");
+    var utftext = "";
+    for (var n = 0; n < str.length; n++) {
+        var c = str.charCodeAt(n);
+        if (c < 128) {
+            utftext += String.fromCharCode(c);
+        } else if ((c > 127) && (c < 2048)) {
+            utftext += String.fromCharCode((c >> 6) | 192);
+            utftext += String.fromCharCode((c & 63) | 128);
+        } else {
+            utftext += String.fromCharCode((c >> 12) | 224);
+            utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+            utftext += String.fromCharCode((c & 63) | 128);
+        }
+    }
+    return utftext;
 }
 $(document).ready(function() {
 	jQuery(document).ready(function($) {
