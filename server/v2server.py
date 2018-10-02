@@ -44,7 +44,7 @@ class sqlconn(object):
 
     # 加载数据库配置
     def load_sqlcfg(self):
-        config_path = '/home/v2rayMS/server/sqlconn.json'
+        config_path = './sqlconn.json'
         conncfg = None
         # 如果不存在文件，生成默认配置文件，并使用默认配置继续
         if not os.path.exists(config_path):
