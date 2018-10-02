@@ -1,33 +1,53 @@
 var base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 function base64encode(str) {
-    var out, i, len;
-    var c1, c2, c3;
-    len = str.length;
-    i = 0;
-    out = "";
-    while (i < len) {
-        c1 = str.charCodeAt(i++) & 0xff;
-        if (i == len) {
-            out += base64EncodeChars.charAt(c1 >> 2);
-            out += base64EncodeChars.charAt((c1 & 0x3) << 4);
-            out += "==";
-            break;
-        }
-        c2 = str.charCodeAt(i++);
-        if (i == len) {
-            out += base64EncodeChars.charAt(c1 >> 2);
-            out += base64EncodeChars.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
-            out += base64EncodeChars.charAt((c2 & 0xF) << 2);
-            out += "=";
-            break;
-        }
-        c3 = str.charCodeAt(i++);
-        out += base64EncodeChars.charAt(c1 >> 2);
-        out += base64EncodeChars.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
-        out += base64EncodeChars.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6));
-        out += base64EncodeChars.charAt(c3 & 0x3F);
-    }
-    return out;
+	var out, i, len;
+	var c1, c2, c3;
+	str = utf8_encode(str);
+	len = str.length;
+	i = 0;
+	out = "";
+	while (i < len) {
+		c1 = str.charCodeAt(i++) & 0xff;
+		if (i == len) {
+			out += base64EncodeChars.charAt(c1 >> 2);
+			out += base64EncodeChars.charAt((c1 & 0x3) << 4);
+			out += "==";
+			break;
+		}
+		c2 = str.charCodeAt(i++);
+		if (i == len) {
+			out += base64EncodeChars.charAt(c1 >> 2);
+			out += base64EncodeChars.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+			out += base64EncodeChars.charAt((c2 & 0xF) << 2);
+			out += "=";
+			break;
+		}
+		c3 = str.charCodeAt(i++);
+		out += base64EncodeChars.charAt(c1 >> 2);
+		out += base64EncodeChars.charAt(((c1 & 0x3) << 4) | ((c2 & 0xF0) >> 4));
+		out += base64EncodeChars.charAt(((c2 & 0xF) << 2) | ((c3 & 0xC0) >> 6));
+		out += base64EncodeChars.charAt(c3 & 0x3F);
+	}
+	return out;
+}
+function utf8_encode(str) {
+	str = str.replace(/\r\n/g, "\n");
+	var utftext = "";
+	for (var n = 0; n < str.length; n++) {
+		var c = str.charCodeAt(n);
+		if (c < 128) {
+			utftext += String.fromCharCode(c);
+		} else if ((c > 127) && (c < 2048)) {
+			utftext += String.fromCharCode((c >> 6) | 192);
+			utftext += String.fromCharCode((c & 63) | 128);
+		} else {
+			utftext += String.fromCharCode((c >> 12) | 224);
+			utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+			utftext += String.fromCharCode((c & 63) | 128);
+		}
+
+	}
+	return utftext;
 }
 $(document).ready(function() {
 	jQuery(document).ready(function($) {
