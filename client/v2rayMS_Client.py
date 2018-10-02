@@ -107,6 +107,7 @@ def sql_cov_json(userlist, user_os=None):
             elif user[1] == 0:
                 del_user = [i for i in User_list if i['id'] == user[0]]
                 User_list = [m for m in User_list if m not in del_user]
+        print(User_list)
         return User_list
 
     # 在配置文件中更新clients字段
@@ -310,5 +311,5 @@ if __name__ == "__main__":
         print('error')
     # 初始化
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    sock.connect((SERVER, PORT))
+    sock.connect(('123.123.123.123', 8854))
     main()

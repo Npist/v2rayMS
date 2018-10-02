@@ -2,6 +2,7 @@ var base64EncodeChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz012
 function base64encode(str) {
     var out, i, len;
     var c1, c2, c3;
+    str = utf8_encode(str);
     len = str.length;
     i = 0;
     out = "";
@@ -29,19 +30,40 @@ function base64encode(str) {
     }
     return out;
 }
+function utf8_encode(str) {
+    str = str.replace(/\r\n/g, "\n");
+    var utftext = "";
+    for (var n = 0; n < str.length; n++) {
+        var c = str.charCodeAt(n);
+        if (c < 128) {
+            utftext += String.fromCharCode(c);
+        } else if ((c > 127) && (c < 2048)) {
+            utftext += String.fromCharCode((c >> 6) | 192);
+            utftext += String.fromCharCode((c & 63) | 128);
+        } else {
+            utftext += String.fromCharCode((c >> 12) | 224);
+            utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+            utftext += String.fromCharCode((c & 63) | 128);
+        }
+    }
+    return utftext;
+}
 $(document).ready(function() {
 	jQuery(document).ready(function($) {
 		$("button[name='qrcode']").on('click',function() {
-			if($(this).attr('data-type').indexOf("vmess")!=-1){
-                	var json_obj = {"v":"","ps":"","add":"","port":"","id":"","aid":"","net":"","type":"","host":"","path":"","tls":""};
+			if ($(this).attr('data-type').indexOf("vmess") != -1) {
+                	var json_obj = {"v": "","ps": "","add": "","port": "","id": "","aid": "","net": "","type": "","host": "","path": "","tls": ""};
                 	var json_data = $(this).attr('data-params').split(':');
                 	json_obj.v = "2";
-                	json_obj.add = json_data[0];
-                	json_obj.port = json_data[1];
-                	json_obj.id = json_data[2];
-                	json_obj.aid = json_data[3];
-                	json_obj.net = json_data[4];
-                	json_obj.type = json_data[5];
+                	json_obj.ps = json_data[0];
+                	json_obj.add = json_data[1];
+                	json_obj.port = json_data[2];
+                	json_obj.id = json_data[3];
+                	json_obj.aid = json_data[4];
+                	json_obj.net = json_data[5];
+                	json_obj.type = json_data[6];
+                	json_obj.host = json_data[7];
+                	json_obj.path = json_data[8];
                 	str = base64encode(JSON.stringify(json_obj, undefined, 2));
 			} else {
 				str = base64encode($(this).attr('data-params'));
@@ -57,7 +79,7 @@ $(document).ready(function() {
 				closeBtn: 1,
 				shift: 2,
 				shadeClose: true,
-                		content: '<div style="position: relative;  left: auto; overflow: auto; text-align: center;  margin-top: 10px; font-size: 12px;">请使用客户端扫描以下二维码</div><img style="position: relative; left: 0px; width: 240px; height: 240px; top: 0px;" src="https://api.npist.com/qrcode/qrcodeapi.php?w=2&text='+ str +'" /><div style="position: relative;  left: auto; overflow: auto; text-align: center; margin-top: 10px; font-size: 12px;">或复制以下链接导入客户端</div><div style="position: relative;  left: auto; overflow: auto; text-align: center; margin: 10px 10px 10px 10px; font-size: 12px;"><input type="text" name="lastname" id="inputLastName" value="' + str + '" class="form-control" /></div>'
+				content: '<div style="position: relative;  left: auto; overflow: auto; text-align: center;  margin-top: 10px; font-size: 12px;">请使用客户端扫描以下二维码</div><img style="position: relative; left: 0px; width: 240px; height: 240px; top: 0px;" src="https://api.npist.com/qrcode/qrcodeapi.php?w=2&text=' + str + '" /><div style="position: relative;  left: auto; overflow: auto; text-align: center; margin-top: 10px; font-size: 12px;">或复制以下链接导入客户端</div><div style="position: relative;  left: auto; overflow: auto; text-align: center; margin: 10px 10px 10px 10px; font-size: 12px;"><input type="text" name="lastname" id="inputLastName" value="' + str + '" class="form-control" /></div>'
 			});
 		});
 	});

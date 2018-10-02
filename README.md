@@ -19,28 +19,50 @@ whmcs modules自GPLv3开源项目修改而来并以WHMCS插件形式存在，故
 安装请参考http://www.mak-blog.com/whmcs-shadowsocks-plugin.html<br />
 ## 2018.8.1<br />
 初始版本<br />
-<br />
-# v2ray多用户后端安装说明<br />
+# 安装说明<br />
+### 1.V2Ray多用户后端安装说明<br />
 建议使用Python3.6运行<br />
 节点服务器运行前请参考官方文档安装v2ray<br />
-安装命令行如下<br />
-bash <(curl -L -s https://install.direct/go.sh)<br />
-<br />
-### Server目录存放进数据库服务器<br />
+V2Ray安装命令行如下<br />
+> bash <(curl -L -s https://install.direct/go.sh)<br />
+
+### 2.server目录存放进数据库服务器<br />
 user.sql恢复进mysql或者mariadb<br />
-sqlconn.json为数据库连接文件  根据自己的mysql数据库配置<br />
-<del>执行以下命令启动<br />
-nohup python3 -u v2rayMS_Server.py>> server.log 2>&1 &<br />
-后台运行前建议首先前台执行python3 v2rayMS_Server.py或查看server.log分析Log<br /></del>
+sqlconn.json为数据库连接文件，根据自己的mysql数据库配置<br />
+cron.php为流量定期重置程序，请将第3行的文件目录修改成server文件夹所在目录<br />
+v2server.py为数据库更新程序，请将第47行的文件目录修改成server文件夹所在目录<br />
+
+> <del>执行以下命令启动<br /> nohup python3 -u v2rayMS_Server.py>> server.log
+> 2>&1 &<br /> 后台运行前建议首先前台执行python3
+> v2rayMS_Server.py或查看server.log分析Log<br /></del>
+> SSH登录服务器使用nohup后台运行的话可能会出现broken pipe报错，原因应该是nohup会重定向stderr到stdout，ssh会话结束后会断开pipe
+
 建议使用screen命令 在session中运行python3 v2rayMS_Server.py
-<br />
-### Client目录存放进节点服务器<br />
-vim打开文件v2rayMS_Client.py  修改服务端IP<br />
-<del>执行以下命令启动<br />
-nohup python3 -u v2rayMS_Client.py>> server.log 2>&1 &<br />
-后台运行前建议首先前台执行python3 v2rayMS_Client.py或查看server.log分析Log<br /></del>
+> screen -L -t v2s -S v2s
+
+*在/etc/screenrc文件中添加**logfile /home/screenlog/%t.log**可配合上述语句将日志自动导出到/home/screenlog/目录下*
+> python3 -u v2rayMS_Server.py
+> `Ctrl+a`,`d`,`Enter`
+
+添加定时任务，每月1日0点执行
+
+> php /home/V2rayMS/server/cron.php
+
+*上述文件目录请自行更改*
+
+### 3.client目录存放进节点服务器<br />
+v2rayMS_Client.py为节点服务器主程序，请将第314行的IP修改成节点服务器的IP<br />
+
+> <del>执行以下命令启动<br /> nohup python3 -u v2rayMS_Client.py>> server.log
+> 2>&1 &<br /> 后台运行前建议首先前台执行python3
+> v2rayMS_Client.py或查看server.log分析Log<br /></del>
+> SSH登录服务器使用nohup后台运行的话可能会出现broken pipe报错，原因应该是nohup会重定向stderr到stdout，ssh会话结束后会断开pipe
+
 建议使用screen命令 在session中运行python3 v2rayMS_Client.py
-<br />
-<br />
-<br />
-SSH登录服务器使用nohup后台运行的话可能会出现broken pipe报错，原因应该是nohup会重定向stderr到stdout，ssh会话结束后会断开pipe
+> screen -L -t v2c -S v2c
+
+*在/etc/screenrc文件中添加**logfile /home/screenlog/%t.log**可配合上述语句将日志自动导出到/home/screenlog/目录下*
+> python3 -u v2rayMS_Client.py
+> `Ctrl+a`,`d`,`Enter`
+
+### 4.whmcs目录存放进WHMCS前端服务器<br />

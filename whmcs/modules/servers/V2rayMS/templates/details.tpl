@@ -81,7 +81,7 @@
                                 <td class="hidden-sm hidden-xs">{$node[4]}</td>
                                 <td class="hidden-sm hidden-xs">{$node[5]}</td>
                                 <td data-hook="action">
-                                    <button name="qrcode" class="btn btn-primary btn-xs" data-type="vmess" data-params="{$node[1]|trim}:{$node[2]|trim}:{$usage.uuid|trim}:{$node[3]|trim}:{$node[4]|trim}:{$node[5]|trim}">
+                                    <button name="qrcode" class="btn btn-primary btn-xs" data-type="vmess" data-params="{$node[0]|trim}:{$node[1]|trim}:{$node[2]|trim}:{$usage.uuid|trim}:{$node[3]|trim}:{$node[4]|trim}:{$node[5]|trim}">
                                         <i class="fa fa-qrcode"></i>
                                         二维码
                                     </button>

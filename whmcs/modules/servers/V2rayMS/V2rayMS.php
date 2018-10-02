@@ -74,7 +74,7 @@ function V2rayMS_ConfigOptions()
 		'Description' => '是否需要重置流量'
 		),
 	'流量限制' => array('Type' => 'text', 'Size' => '25', 'Description' => '单位MB'),
-	'线路列表' => array('Type' => 'textarea', 'Rows' => '3', 'Cols' => '50', 'Description' => '格式:线路名称|服务器地址|端口|AlterID|传输协议|伪装混淆| 一行一个')
+	'线路列表' => array('Type' => 'textarea', 'Rows' => '3', 'Cols' => '100', 'Description' => '格式如下，一行一个，[ ]内为可选内容：<br/>别名(remarks)|地址(address)|端口(port)|额外ID(alterId)|传输协议(network)|伪装类型(type)[:伪装域名(host):路径(path)]<br/>例子：<br/>我是名字|123.123.123.123|1024|64|ws|none:air.mlge.xyz:/mlge/')
 	);
 }
 function V2rayMS_TestConnection(array $params)
