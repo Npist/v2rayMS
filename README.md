@@ -38,11 +38,11 @@ nohup python3 -u v2rayMS_Server.py>> server.log 2>&1 &<br />
 后台运行前建议首先前台执行python3 v2rayMS_Server.py或查看server.log分析Log<br /></del>
 <br />
 建议使用screen命令 在session中运行python3 v2rayMS_Server.py
-> screen -L -t v2s -S v2s
+> screen -L -t v2s -S v2s<br />
 *在/etc/screenrc文件中添加**logfile /home/screenlog/%t.log**可配合上述语句将日志自动导出到/home/screenlog/目录下*
-> python3 -u /home/v2rayMS/server/v2rayMS_Server.py
+> python3 -u /home/v2rayMS/server/v2rayMS_Server.py<br />
 *上述文件目录请自行更改*
-`Ctrl+a`,`d`,`Enter`
+> `Ctrl+a`,`d`,`Enter`<br />
 <br />
 ### 3.client目录存放进节点服务器<br />
 v2rayMS_Client.py为节点服务器主程序，请将第314行的IP修改成节点服务器的IP<br />
@@ -52,11 +52,11 @@ nohup python3 -u v2rayMS_Client.py>> server.log 2>&1 &<br />
 后台运行前建议首先前台执行python3 v2rayMS_Client.py或查看server.log分析Log<br /></del>
 <br />
 建议使用screen命令 在session中运行python3 v2rayMS_Client.py
-> screen -L -t v2c -S v2c
+> screen -L -t v2c -S v2c<br />
 *在/etc/screenrc文件中添加**logfile /home/screenlog/%t.log**可配合上述语句将日志自动导出到/home/screenlog/目录下*
-> python3 -u /home/v2rayMS/client/v2rayMS_Client.py
+> python3 -u /home/v2rayMS/client/v2rayMS_Client.py<br />
 *上述文件目录请自行更改*
-`Ctrl+a`,`d`,`Enter`
+> `Ctrl+a`,`d`,`Enter`<br />
 <br />
 SSH登录服务器使用nohup后台运行的话可能会出现broken pipe报错，原因应该是nohup会重定向stderr到stdout，ssh会话结束后会断开pipe
 <br />
