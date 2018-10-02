@@ -1,6 +1,6 @@
 <?php
 //读取数据库连接信息
-$json_string = file_get_contents('/home/v2rayMS/server/sqlconn.json');
+$json_string = file_get_contents('./sqlconn.json');
 $data = json_decode($json_string, true);
 //连接数据库
 try {
