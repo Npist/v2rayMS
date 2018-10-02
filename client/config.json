@@ -21,8 +21,8 @@
         }
     },
     "log": {
-        "access": "/var/log/v2ray/access.log",
-        "error": "/var/log/v2ray/error.log",
+        "access": "/etc/v2ray/access.log",
+        "error": "/etc/v2ray/error.log",
         "loglevel": "warning"
     },
     "inbound": {
@@ -51,11 +51,6 @@
         },
         "settings": {
             "clients": [
-                {
-                    "id": "e853546d-b3d2-4468-a4b5-d536ab2438fa",
-                    "alterId": 64,
-                    "level": 0
-                }
             ]
         }
     },
