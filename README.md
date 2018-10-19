@@ -2,6 +2,10 @@
 实际部署请为socket通讯中的安全性进行强化<br />
 效果可查看https://proxy.npist.com<br />
 有问题请联系npist35@gmail.com<br />
+# 客户端项目
+https://github.com/Npist/v2rayMSC<br />
+请根据该项目说明配置./whmcs/clientapi.php中的RSA密钥字符串<br />
+<br />
 # 更新日志<br />
 ## 2018.10.3<br />
 修复服务端若干BUG<br />
