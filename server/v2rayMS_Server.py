@@ -94,8 +94,9 @@ def init_sqlconn(i, source):
             elif i == 1:
                 print('Mysql Connection Successfully Recovered')
             mark = False
-        except Exception:
+        except Exception as e:
             print('Mysql Connection Error')
+            print(e)
             time.sleep(10)
             continue
     return conn

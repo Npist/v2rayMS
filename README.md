@@ -28,6 +28,7 @@ whmcs modules自GPLv3开源项目修改而来并以WHMCS插件形式存在，故
 <br />
 # v2ray多用户后端安装说明<br />
 建议使用Python3.6运行<br />
+使用前请自行安装python的pymysql模块<br />
 节点服务器运行前请参考官方文档安装v2ray<br />
 安装命令行如下<br />
 bash <(curl -L -s https://install.direct/go.sh)<br />
