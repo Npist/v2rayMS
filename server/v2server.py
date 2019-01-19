@@ -8,8 +8,8 @@ import sys
 @File    :   server.py
 @License :   http://opensource.org/licenses/MIT The MIT License
 @Link    :   https://npist.com/
-@Time    :   2018.10.3
-@Ver     :   0.3.2
+@Time    :   2019.01.19
+@Ver     :   0.5
 '''
 
 
@@ -158,27 +158,6 @@ class sqlconn(object):
                 for n in all_user:
                     if n['sid'] == i['sid']:
                         n['enable'] = 0
-
-    # # 获取有效用户名列表
-    # def pull_user_name(self):
-    #     sql_exec = "SELECT email FROM user"
-    #     add_program = 'self.username_dict = cursor.fetchall()'
-    #     self.execute_sql(sql_exec, add_program)
-    #     # 只保留id(email)
-    #     self.username_list = self.cov_dict_value(self.username_dict)
-
-    # 获取用户状态
-    # def pull_user_status(self, email):
-    #     sql_exec = "SELECT enable FROM user WHERE email = '%s'" % (email)
-    #     add_program = 'self.all_userstatus = cursor.fetchall()'
-    #     self.execute_sql(sql_exec, add_program)
-    #     # print(self.all_userstatus)
-
-    # # 检索用户流量
-    # def pull_user_transfer(self):
-    #     sql_exec = "SELECT * FROM user"  # "SELECT `user`.uuid, `user`.`enable` FROM `user`"
-    #     add_program = 'self.usertransfer = cursor.fetchall()'
-    #     self.execute_sql(sql_exec, add_program)
 
     # 更新流量到数据库
     def update_traffic(self, traffic_data):
