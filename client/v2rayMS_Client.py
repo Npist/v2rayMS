@@ -10,8 +10,8 @@ import subprocess
 @File    :   v2rayMS_Client.py
 @License :   http://opensource.org/licenses/MIT The MIT License
 @Link    :   https://npist.com/
-@Time    :   2019.01.19
-@Ver     :   0.5
+@Time    :   2019.03.28
+@Ver     :   0.5.1
 '''
 
 UPDATE_TIME = 50
@@ -94,7 +94,7 @@ def sql_cov_json(userlist, user_os=None):
     # 在配置文件中更新clients字段
     def create_config_json():
         c_dict = get_config_json()
-        c_dict["inbound"]["settings"].update({'clients': make_config_json()})
+        c_dict["inbounds"][0]["settings"].update({'clients': make_config_json()})
         return c_dict
 
     # 更新json并格式化
